@@ -1,0 +1,104 @@
+import React, { useState, useEffect } from 'react';
+import { Line, Doughnut } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale, LinearScale, PointElement, LineElement, ArcElement,
+  Title, Tooltip, Legend
+);
+
+const Dashboard = ({ businessData }) => {
+  const [projection, setProjection] = useState({});
+
+  useEffect(() => {
+    // Profit projection calculator
+    const weeks = 52;
+    const weeklyGrowth = businessData.growthRate;
+    const projectedRevenue = [];
+    const projectedProfit = [];
+    
+    let revenue = businessData.dailyRevenue * 7;
+    let expenses = businessData.dailyExpenses * 7;
+    
+    for (let i = 0; i < weeks; i++) {
+      revenue *= (1 + weeklyGrowth);
+      expenses *= 1.02; // 2% expense growth
+      projectedRevenue.push(revenue);
+      projectedProfit.push(revenue - expenses);
+    }
+
+    setProjection({ revenue: projectedRevenue, profit: projectedProfit });
+  }, [businessData]);
+
+  const revenueChartData = {
+    labels: Array.from({length: 12}, (_, i) => `Week ${i+1}`),
+    datasets: [{
+      label: 'Projected Revenue',
+      data: projection.revenue?.slice(0,12),
+      borderColor: 'rgb(34,197,94)',
+      backgroundColor: 'rgba(34,197,94,0.1)',
+      tension: 0.4
+    }]
+  };
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+      {/* Profit Projection Card */}
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">💰 Year Profit Projection</h2>
+        <div className="text-4xl font-bold text-green-600 mb-4">
+          ${Math.round(projection.profit?.[51] || 0).toLocaleString()}
+        </div>
+        <p className="text-gray-600 mb-6">Annual profit at {businessData.growthRate*100}% weekly growth</p>
+        <Line data={revenueChartData} options={{ responsive: true, maintainAspectRatio: false }} height={300} />
+      </div>
+
+      {/* Quick Stats */}
+      <div className="lg:col-span-1 xl:col-span-2 grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg">
+          <div className="text-2xl font-bold">${businessData.dailyRevenue.toLocaleString()}</div>
+          <div className="text-sm opacity-90">Daily Revenue</div>
+        </div>
+        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-6 rounded-2xl shadow-lg">
+          <div className="text-2xl font-bold">${(businessData.dailyRevenue - businessData.dailyExpenses).toLocaleString()}</div>
+          <div className="text-sm opacity-90">Daily Profit</div>
+        </div>
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg">
+          <div className="text-2xl font-bold">{businessData.customers}</div>
+          <div className="text-sm opacity-90">Customers</div>
+        </div>
+      </div>
+
+      {/* Action Items */}
+      <div className="xl:col-span-3 bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <h3 className="text-xl font-bold text-gray-900 mb-6">📋 Today's Scale Actions</h3>
+        <div className="space-y-3">
+          <div className="flex items-center p-4 bg-indigo-50 rounded-xl">
+            <div className="w-2 h-2 bg-indigo-500 rounded-full mr-3"></div>
+            <span>Call {businessData.leads} new leads (30min)</span>
+          </div>
+          <div className="flex items-center p-4 bg-emerald-50 rounded-xl">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
+            <span>Follow up with {Math.round(businessData.customers * 0.2)} customers</span>
+          </div>
+          <div className="flex items-center p-4 bg-orange-50 rounded-xl">
+            <div className="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
+            <span>Optimize pricing (+5% test this week)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

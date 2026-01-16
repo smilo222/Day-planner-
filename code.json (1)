@@ -1,0 +1,15 @@
+{
+  "name": "Business Scale Planner",
+  "short_name": "ScalePlan",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#10b981",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xMDI0IDUxMnYtNTEyaC01MTJ2MTEySDB2ODAwaDgxNnYtMTEyaDE5MnYtMzkyaC0xOTJ2LTExMmg4MTZ2NTEyaDE5MnYtNDgweiIgZmlsbD0iIzEwYjk4MSIvPjxwYXRoIGQ9Ik0zMjggNjEyYzAgNjYuNjYgNTMuMzQgMTIwIDEyMCAxMjBzMTIwLTUzLjM0IDEyMC0xMjBjMC02Ni42Ni01My4zNC0xMjAtMTIwLTEyMFMzMjggNTQ1LjM0IDMyOCA2MTJ6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==",
+      "sizes": "1024x1024",
+      "type": "image/svg+xml"
+    }
+  ]
+}

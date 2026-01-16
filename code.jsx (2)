@@ -1,0 +1,78 @@
+import React, { useState } from 'react';
+
+const DayPlanner = () => {
+  const [tasks, setTasks] = useState([
+    { id: 1, text: 'Cold call 20 leads', time: '9:00-10:30', completed: false, category: 'sales' },
+    { id: 2, text: 'Customer follow-ups', time: '10:30-11:30', completed: false, category: 'sales' },
+    { id: 3, text: 'Social media content', time: '14:00-15:00', completed: false, category: 'marketing' },
+    { id: 4, text: 'Review analytics & optimize', time: '16:00-17:00', completed: false, category: 'ops' }
+  ]);
+
+  const toggleTask = (id) => {
+    setTasks(tasks.map(task => 
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ));
+  };
+
+  const categories = {
+    sales: { color: 'from-blue-500 to-blue-600', icon: '📞' },
+    marketing: { color: 'from-pink-500 to-pink-600', icon: '📱' },
+    ops: { color: 'from-emerald-500 to-emerald-600', icon: '⚙️' }
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto">
+      <h2 className="text-3xl font-bold text-gray-900 mb-8">📅 Today’s Business Day</h2>
+      
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 mb-8">
+        <div className="grid grid-cols-3 gap-4 text-center mb-8">
+          <div className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl">
+            <div className="text-2xl font-bold">20</div>
+            <div className="text-sm">New Leads</div>
+          </div>
+          <div className="p-4 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-xl">
+            <div className="text-2xl font-bold">$1,200</div>
+            <div className="text-sm">Revenue Goal</div>
+          </div>
+          <div className="p-4 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl">
+            <div className="text-2xl font-bold">3</div>
+            <div className="text-sm">Meetings</div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {tasks.map(task => (
+            <div 
+              key={task.id}
+              className={`flex items-center p-4 rounded-xl transition-all duration-200 ${
+                task.completed 
+                  ? 'bg-gray-50 border-2 border-green-200' 
+                  : 'hover:shadow-md bg-gradient-to-r from-white to-gray-50 border border-gray-200'
+              }`}
+            >
+              <button
+                onClick={() => toggleTask(task.id)}
+                className={`w-6 h-6 rounded-lg flex items-center justify-center mr-4 transition-all ${
+                  task.completed 
+                    ? 'bg-green-500 text-white shadow-lg' 
+                    : 'border-2 border-gray-300 hover:border-green-400'
+                }`}
+              >
+                {task.completed ? '✓' : ''}
+              </button>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900">{task.text}</div>
+                <div className="text-sm text-gray-500">{task.time}</div>
+              </div>
+              <div className={`px-3 py-1 rounded-full text-xs font-medium text-white ${categories[task.category].color}`}>
+                {categories[task.category].icon}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DayPlanner;
